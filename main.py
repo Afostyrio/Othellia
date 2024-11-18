@@ -86,10 +86,6 @@ class Reversi:
                     jugadas.append((x, y)) # le agregas a la lusta
         return jugadas # le regresa la lisra de validas 
 
-
-import tkinter as tk
-from tkinter import messagebox
-
 class InterfazReversi:
     def __init__(self, raiz):
         self.raiz = raiz
