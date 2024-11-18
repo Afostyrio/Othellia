@@ -151,9 +151,16 @@ class InterfazReversi:
         self.realizar_jugada(x, y)
         
     def realizar_jugada_mouse(self, x, y):
-        #Checala jugada en la pos actual mouse
-        x, y = self.cursor_pos
-        self.realizar_jugada(x, y)
+        # Ahora solo se realiza la jugada en la posición (x, y) que el mouse selecciona
+        if self.juego.realizar_jugada(x, y):
+            self.actualizar_tablero()
+            if not self.juego.obtener_jugadas_validas():
+                self.juego.turno = -self.juego.turno
+                if not self.juego.obtener_jugadas_validas():
+                    self.finalizar_juego()
+        else:
+            messagebox.showwarning("Jugada inválida", "No puedes realizar esa jugada.")
+
 
     def realizar_jugada(self, x, y):
         if self.juego.realizar_jugada(x, y):
