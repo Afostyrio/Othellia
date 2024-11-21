@@ -5,7 +5,7 @@ class Reversi:
     def __init__(self):
         #inicias un tablero 8*8 con puro 0
         self.tablero = [[0 for _ in range(8)] for _ in range(8)] 
-        #inicia el blanco 1 
+        #inicia el negro (-1)
         self.turno = -1  
         #piezas iniciales
         self.iniciar_juego()
@@ -85,6 +85,17 @@ class Reversi:
                 if self.jugada_valida(x, y): # si (x,y) es valido
                     jugadas.append((x, y)) # le agregas a la lusta
         return jugadas # le regresa la lisra de validas 
+
+    def is_game_over(self):
+        if len(self.obtener_jugadas_validas()) == 0: return True
+        return False
+
+    def game_result(self):
+        white_score = sum(fila.count(1) for fila in self.juego.tablero)
+        black_score = sum(fila.count(-1) for fila in self.juego.tablero)
+        if black_score > white_score: return -1
+        elif black_score < white_score: return 1
+        else: return 0
 
 class InterfazReversi:
     def __init__(self, raiz):
