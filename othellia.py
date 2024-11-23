@@ -1,10 +1,12 @@
-import numpy
+import numpy as np
 from collections import defaultdict
 from main import *
 
 class ReversIA():
     def __init__(self, state, parent=None, parent_action=None):
-        self.state = state
+        self.state = Reversi()
+        self.state.tablero = state.copy()
+        self.state.turno = 1
         self.parent = parent
         self.parent_action = parent_action
         self.children = []
@@ -29,9 +31,9 @@ class ReversIA():
     
     def expand(self):
         action = self._untried_actions.pop()
-        next_state = self.state.realizar_jugada(action)
-        child_node = MonteCarloTreeSearchNode(
-            next_state, parent=self, parent_action=action)
+        self.state.realizar_jugada(*action)
+        next_state = self.state
+        child_node = ReversIA(next_state.tablero, parent=self, parent_action=action)
         self.children.append(child_node)
         return child_node 
     
@@ -44,7 +46,8 @@ class ReversIA():
         while not current_rollout_state.is_game_over():           
             possible_moves = current_rollout_state.obtener_jugadas_validas()
             action = self.rollout_policy(possible_moves)
-            current_rollout_state = current_rollout_state.realizar_jugada(action)
+            current_rollout_state.realizar_jugada(*action)
+            current_rollout_state = self.state
         return current_rollout_state.game_result()
 
     def backpropagate(self, result):
@@ -87,11 +90,16 @@ class ReversIA():
 
 def main():
     raiz = tk.Tk()
-    interfaz = InterfazReversi(raiz)
-    othellia = ReversIA(state= interfaz.juego)
-    while raiz.mainloop():
+
+    def task():
         if interfaz.juego.turno == 1:
-            print(othellia.best_action())
+            othellia.best_action().state.mostrar_tablero()
+        raiz.after(2000, task)
+
+    interfaz = InterfazReversi(raiz)
+    othellia = ReversIA(state= interfaz.juego.tablero)
+    raiz.after(2000, task)
+    raiz.mainloop()
     return
 
 main()

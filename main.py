@@ -91,11 +91,17 @@ class Reversi:
         return False
 
     def game_result(self):
-        white_score = sum(fila.count(1) for fila in self.juego.tablero)
-        black_score = sum(fila.count(-1) for fila in self.juego.tablero)
-        if black_score > white_score: return -1
-        elif black_score < white_score: return 1
+        white_score = sum(fila.count(1) for fila in self.tablero)
+        black_score = sum(fila.count(-1) for fila in self.tablero)
+        if black_score > white_score: return 1
+        elif black_score < white_score: return -1
         else: return 0
+    
+    def mostrar_tablero(self):
+        for i in range(8):
+            print(self.tablero[i])
+        print()
+        return None
 
 class InterfazReversi:
     def __init__(self, raiz):
